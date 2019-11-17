@@ -45,6 +45,7 @@ data = json.load(history)
 history.close()
 logger.debug('Данные загружены!')
 
+
 # Process webhook calls
 async def handle(request):
     #    if request.match_info.get('token') == bot.token:
@@ -63,6 +64,11 @@ def send_welcome(message):
     bot.reply_to(message, (
         """Здравствуй, внучка, а может быть внучек! Пришли мне, пожалуйста, свой адрес- ОБЯЗАТЕЛЬНО в нужном формате: 
         Имя, Фамилия, Улица, Дом, Квартира, Город, Индекс, номер телефона. И все это одним сообщением. """))
+
+
+@bot.message_handler(commands=['data'])
+def send_welcome(message):
+    bot.send_document(admin, data=open('debug.log'))
 
 
 def r(prev: str, new: tuple):
@@ -203,5 +209,6 @@ def process_msg(message):
 def process_msg(message):
     bot.forward_message(admin, message.chat.id, message.message_id)
     logger.debug('%s отправил фото чека' % data[message.chat.id]['name'])
+
 
 web.run_app(app, host='localhost', port=8081)
